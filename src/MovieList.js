@@ -4,6 +4,7 @@ import { Grid, CircularProgress } from '@mui/material';
 import MovieCard from './MovieCard';
 import Pagination from './Pagination';
 import Search from './Search';
+import { apiKey } from './ApiKeys';
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
@@ -32,14 +33,14 @@ const MovieList = () => {
       if (debouncedSearchTerm.trim()) {
         response = await axios.get('https://api.themoviedb.org/3/search/movie', {
           params: {
-            api_key: '3d4474c017ac755e9c059b001cf39ff0',
+            api_key: apiKey,
             query: debouncedSearchTerm,
           },
         });
       } else {
         response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
           params: {
-            api_key: '3d4474c017ac755e9c059b001cf39ff0',
+            api_key: apiKey,
             page: currentPage,
           },
         });
