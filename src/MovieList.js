@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardMedia, Typography, TextField, Button, Grid } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, TextField, Button, Grid, CircularProgress } from '@mui/material';
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
@@ -82,26 +82,27 @@ const MovieList = () => {
 
   return (
     <div>
-      
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+      <div className="center-div">
         <TextField type="text" placeholder="Search movies..." value={searchTerm} onChange={handleSearchChange} />
       </div>
-      {isLoading && <div>Loading...</div>}
+      <div className="center-div">
+      {isLoading && <CircularProgress size={80}/>}
+      </div>
       <Grid container spacing={2} justifyContent="flex-start">
         {movies.map((movie, index) => (
           <Grid key={index} item xs={6} sm={6} md={3}>
-            <Card style={{ marginBottom: '10px', backgroundColor: '#EBEBEBAA', color: '#fff', boxShadow: '10px 10px 5px #aaaaaa' }}>
+            <Card style={{ height: '100%', marginBottom: '10px', backgroundColor: '#EBEBEBAA', color: '#fff', boxShadow: '5px 5px 5px lightblue' }}>
               <CardMedia
                 component="img"
                 alt={movie.title}
                 height="300"
                 image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               />
-              <CardContent>
-                <Typography gsx={{ fontSize: 28 }} style={{ color: 'black' }} gutterBottom>
+              <CardContent style={{ maxHeight: '100px', overflow: 'hidden' }}>
+                <Typography style={{ color: 'black' }} gutterBottom>
                   {movie.title}
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
+                <Typography variant="body2" color="textSecondary" component="p" style={{fontSize:9}}>
                   {movie.overview}
                 </Typography>
               </CardContent>
@@ -109,7 +110,7 @@ const MovieList = () => {
           </Grid>
         ))}
       </Grid>
-      <div>
+      <div className="center-div">
         <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
           Previous
         </Button>
