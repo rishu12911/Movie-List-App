@@ -27,7 +27,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
   return (
     <div className="center-div">
       <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-        Previous
+        Prev
       </Button>
       {generateVisiblePages().map((page) => (
         <Button key={page} onClick={() => handlePageChange(page)} disabled={currentPage === page}>
