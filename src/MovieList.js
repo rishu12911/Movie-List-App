@@ -73,7 +73,9 @@ const MovieList = () => {
           <MovieCard key={index} movie={movie} />
         ))}
       </Grid>
-      <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+      {(!searchTerm || searchTerm.trim() === '') ? (
+  <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+) : null}
     </div>
   );
 };
