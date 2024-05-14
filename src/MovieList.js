@@ -1,36 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const MovieSearch = () => {
+const MovieList = () => {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false); 
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   useEffect(() => {
     fetchMovies();
-  }, [currentPage]);
-
-  useEffect(() => {
-    generateVisiblePages();
-  }, [currentPage, totalPages]);
+  }, [currentPage, debouncedSearchTerm]);
 
   const fetchMovies = async () => {
+    setIsLoading(true); 
     try {
-      const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
-        params: {
-          api_key: '3d4474c017ac755e9c059b001cf39ff0',
-          page: currentPage
-        }
-      });
+      let response;
+      if (debouncedSearchTerm) {
+        response = await axios.get('https://api.themoviedb.org/3/search/movie', {
+          params: {
+            api_key: '3d4474c017ac755e9c059b001cf39ff0',
+            page: currentPage,
+            query: debouncedSearchTerm
+          }
+        });
+      } else {
+        response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+          params: {
+            api_key: '3d4474c017ac755e9c059b001cf39ff0',
+            page: currentPage
+          }
+        });
+      }
       setMovies(response.data.results);
       setTotalPages(response.data.total_pages);
     } catch (error) {
       console.error('Error fetching movies:', error);
+    } finally {
+      setIsLoading(false); // Set loading state to false after fetching data
     }
   };
 
   const generateVisiblePages = () => {
-    const visiblePageRange = 5; // Number of pages to display
+    const visiblePageRange = 5;
     let startPage = currentPage - 2;
     let endPage = currentPage + 2;
 
@@ -55,9 +76,20 @@ const MovieSearch = () => {
     setCurrentPage(page);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <div>
-      <h1>Movie Search</h1>
+      <h1>Movies List</h1>
+      <input
+        type="text"
+        placeholder="Search movies..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+      {isLoading && <div>Loading...</div>} {/* Display loading spinner */}
       <ul>
         {movies.map((movie, index) => (
           <li key={index}>
@@ -86,4 +118,4 @@ const MovieSearch = () => {
   );
 };
 
-export default MovieSearch;
+export default MovieList;

@@ -1,10 +1,10 @@
 import React from 'react'
-
-import MovieSearch from './MovieSearch'
+import { apiKey } from './ApiKeys'
+import MovieList from './MovieList'
 
 const App = () => {
   return (
-    <MovieSearch/>
+    <MovieList/>
   )
 }
 
