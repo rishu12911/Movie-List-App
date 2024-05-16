@@ -64,6 +64,7 @@ const MovieList = () => {
 
   return (
     <div>
+      <div  className="movie-list-container">
       <Search searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
       <div className="center-div">
         {isLoading && <CircularProgress size={80} />}
@@ -76,6 +77,7 @@ const MovieList = () => {
       {(!searchTerm || searchTerm.trim() === '') ? (
   <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
 ) : null}
+    </div>
     </div>
   );
 };
